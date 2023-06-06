@@ -25,23 +25,29 @@ public class UserDAOImpl implements UserDAO{
 
     @Override
     public void saveUser(User user) {
-        User managed = entityManager.merge(user);
-        entityManager.persist(managed);
+        entityManager.persist(user);
 
         //entityManager.persist(entityManager.merge(user));
     }
 
-   // @Transactional
     @Override
-    public void deleteUser(User user) {
-        User managed = entityManager.merge(user);
-        entityManager.remove(managed);
-
-        //entityManager.remove(entityManager.merge(user));
+    public void updateUser(Integer id, User user) {
+        User user1 = entityManager.find(User.class, id);
+        user1.setId(user.getId());
+        user1.setName(user.getName());
+        user1.setLastName(user.getLastName());
+        user1.setMail(user.getMail());
+        user1.setAge(user.getAge());
+        entityManager.merge(user1);
     }
 
     @Override
-    public User getByIdUser(int id) {
+    public void deleteUser(User user) {
+        entityManager.remove(entityManager.merge(user));
+    }
+
+    @Override
+    public User getById(Integer id) {
         return entityManager.find(User.class, id);
     }
 }

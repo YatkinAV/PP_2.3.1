@@ -11,19 +11,20 @@
             <tr>
                 <th>Id</th>
                 <th>Name</th>
-                <th>Last_Name</th>
+                <th>LastName</th>
                 <th>Age</th>
                 <th>eMail</th>
+                <th>Action</th>
             </tr>
-            <tr th:each="user : ${usersList}">
+            <tr th:each="user : ${userList}">
                 <td th:utext="${user.id}">Id</td>
                 <td th:utext="${user.name}">Name</td>
                 <td th:utext="${user.lastName}">lastName</td>
                 <td th:utext="${user.age}">Age</td>
                 <td th:utext="${user.mail}">Mail</td>
                 <td>
-                <a th:href="@{'/update/'+${user.id}}">edit</a>
-                <a th:href="@{'/delete/'+${user.id}}">delete</a>
+                    <a th:href="@{'/edit/'+${user.id}}">edit</a>
+                    <a th:href="@{'/delete/'+${user.id}}">delete</a>
                 </td>
             </tr>
             </tbody>

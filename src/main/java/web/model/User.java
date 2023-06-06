@@ -1,6 +1,7 @@
 package web.model;
 
 import javax.persistence.*;
+import javax.persistence.criteria.CriteriaBuilder;
 
 @Entity
 @Table(name = "users")
@@ -12,11 +13,12 @@ public class User {
 
     private Integer age;
 
+
     private String mail;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     public User() {}
 
@@ -25,6 +27,10 @@ public class User {
         this.lastName = lastName;
         this.age = age;
         this.mail = mail;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {

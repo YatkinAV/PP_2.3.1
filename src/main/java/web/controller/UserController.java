@@ -2,11 +2,13 @@ package web.controller;
 
 import org.springframework.stereotype.Controller;
 
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import web.model.User;
 import web.service.UserService;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 
 @Controller
@@ -19,13 +21,11 @@ public class UserController {
     }
 
 
-    @RequestMapping(value = "/", method = RequestMethod.GET)
-    public ModelAndView allUsers() {
-        List<User> users = userService.getAllUsers();
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("users");
-        modelAndView.addObject("usersList", users);
-        return modelAndView;
+    @GetMapping("/")
+    public String allUsers(Model model) {
+        List<User> userList = userService.getAllUsers();
+        model.addAttribute("userList", userList);
+        return "users";
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.GET)
@@ -38,25 +38,25 @@ public class UserController {
         userService.saveUser(user);
         return "redirect:/";
     }
-
-    @RequestMapping(value = "/update/{id}", method = RequestMethod.GET)
-    public ModelAndView edit(@PathVariable("id") int id) {
-        User user = userService.getByIdUser(id);
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("editUser");
-        modelAndView.addObject("user", user);
-        return modelAndView;
+    @GetMapping("/edit/{id}")
+    public String showEditUserForm(@PathVariable("id") Integer id, Model model) {
+        User user = userService.getById(id);
+        if (user == null) {
+            return "redirect:/";
+        }
+        model.addAttribute("user", user);
+        return "editUser";
     }
 
-    @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public String editUser(@ModelAttribute("user") User user) {
-        userService.saveUser(user);
+    @PatchMapping("/edit/{id}")
+    public String updateUserSubmit(@PathVariable("id") Integer id, @ModelAttribute("user") User user) {
+        userService.updateUser(id, user);
         return "redirect:/";
     }
 
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
     public String deleteUser(@PathVariable("id") int id) {
-        User user = userService.getByIdUser(id);
+        User user = userService.getById(id);
         userService.deleteUser(user);
         return "redirect:/";
     }
